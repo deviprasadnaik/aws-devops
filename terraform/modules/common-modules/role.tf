@@ -1,5 +1,5 @@
 resource "aws_iam_role" "this" {
-  for_each = var.enable_ec2 ? { create = true } : {}
+  for_each = var.enable_ec2_role ? { create = true } : {}
   name     = "EC2InstanceRole"
 
   assume_role_policy = jsonencode({
@@ -15,7 +15,7 @@ resource "aws_iam_role" "this" {
 }
 
 resource "aws_iam_role_policy_attachment" "this" {
-  for_each = var.enable_ec2 ? toset(local.ec2_policies) : toset([])
+  for_each = (var.enable_ec2_role && var.enable_attachment) ? toset(local.ec2_policies) : toset([])
 
   role       = aws_iam_role.this["create"].name
   policy_arn = each.key

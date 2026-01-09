@@ -1,7 +1,24 @@
-# resource "aws_s3_bucket" "this" {
-#   for_each = local.bucket_map
-#   bucket   = each.key
-# }
+resource "aws_s3_bucket" "this" {
+  for_each = var.enable_s3 ? { create = true } : {}
+  bucket   = "s3-${var.appName}-${random_string.this.result}"
+
+  force_destroy = true
+
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "this" {
+  for_each = aws_s3_bucket.this
+
+  bucket = each.value.id
+
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
+    }
+  }
+}
+
+
 
 # resource "aws_s3_bucket_policy" "this" {
 #   bucket = values(aws_s3_bucket.this)[0].id

@@ -1,0 +1,24 @@
+services:
+  workshop-runner:
+    build:
+      context: .
+    platform: linux/amd64
+    container_name: workshop-runner
+    tty: true
+    stdin_open: true
+
+    volumes:
+      - ./repo:/workspace
+      - ~/.aws:/root/.aws:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+
+    working_dir: /workspace
+
+    environment:
+      AWS_DEFAULT_REGION: us-east-1
+      AWS_REGION: us-east-1
+      AWS_ACCOUNT_ID: "178729889921"
+      JAVA_HOME: /usr/lib/jvm/java-17-amazon-corretto
+      PATH: /usr/lib/jvm/java-17-amazon-corretto/bin:$PATH
+
+    command: /bin/bash

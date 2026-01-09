@@ -17,3 +17,8 @@ data "aws_ami" "this" {
     values = ["hvm"]
   }
 }
+
+data "aws_vpc" "this" {
+  default = true
+}
+
